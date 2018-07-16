@@ -1,7 +1,7 @@
 import boto3
 import botocore
 
-ssm = boto3.client('ssm')
+ssm = boto3.client('ssm', region_name='us-east-1')
 
 def put_parameter(key, value, Type='String', Description=''):
     resp = ssm.put_parameter(

@@ -3,7 +3,7 @@ import time
 from csv import reader
 from . import s3
 botosess = boto3.session.Session()
-athena = botosess.client('athena')
+athena = botosess.client('athena', region_name='us-east-1')
 
 AWS_ACCOUNT_ID = '094103223014'
 output_location_path = 's3://aws-athena-query-results-{}-us-east-1'.format(AWS_ACCOUNT_ID)
