@@ -1,0 +1,3 @@
+
+class NoEventRecordsException(Exception):
+    pass
