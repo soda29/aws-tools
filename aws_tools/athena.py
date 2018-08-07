@@ -36,7 +36,7 @@ def query(q, database):
     execution_id = start_query_execution(q, database)
 
     while get_query_status(execution_id).get('Status').get('State') == 'RUNNING':
-        print 'sleeping...'
+        print('sleeping...')
         time.sleep(10)
 
     status = get_query_status(execution_id)

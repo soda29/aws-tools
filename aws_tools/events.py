@@ -1,7 +1,7 @@
 import boto3
 import urllib
 from exceptions import NoEventRecordsException
-from s3 import get_object as get_s3_object
+from .s3 import get_object as get_s3_object
 try:
     import simplejson as json
 except ImportError:
