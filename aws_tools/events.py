@@ -1,5 +1,5 @@
 import boto3
-import urllib
+from urllib.parse import unquote
 from exceptions import NoEventRecordsException
 from .s3 import get_object as get_s3_object
 try:
@@ -12,7 +12,7 @@ def get_objects_from_event(event):
         raise NoEventRecordsException(repr(event))
     for obj in event['Records']:
         if 's3' in obj:
-            yield get_s3_object(obj['s3']['bucket']['name'], urllib.unquote(obj['s3']['object']['key']))
+            yield get_s3_object(obj['s3']['bucket']['name'], unquote(obj['s3']['object']['key']))
         if 'Sns' in obj:
             for obj2 in get_objects_from_event(json.loads(obj['Sns']['Message'])):
                 yield obj2
