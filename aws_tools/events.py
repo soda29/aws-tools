@@ -8,7 +8,7 @@ except ImportError:
     import json
 
 def get_objects_from_event(event):
-    if not event.has_key('Records') or not event['Records']:
+    if 'Records' not in event or event['Records'] is None:
         raise NoEventRecordsException(repr(event))
     for obj in event['Records']:
         if 's3' in obj:
