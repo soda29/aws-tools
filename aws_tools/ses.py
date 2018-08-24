@@ -8,19 +8,22 @@ import mimetypes
 
 logger = logging.getLogger(__name__)
 
+
 def send_email(source, destination, message, **kwargs):
     '''Send email'''
     client = boto3.client('ses', 'us-east-1')
     result = client.send_email(Source=source,
-         Destination=destination,
-         Message=message,
-         ReplyToAddresses=kwargs.get('reply_to') or [])
+                               Destination=destination,
+                               Message=message,
+                               ReplyToAddresses=kwargs.get('reply_to') or [])
     if 'ErrorResponse' in result:
             logger.info("[Error] send email: {}".format(result))
     return result
 
+
 def send_raw_email():
-    pass
+    raise Exception('Not yet implemented')
+
 
 def send_email_with_attachment(source, destination, message, attachments):
     # The attachment
@@ -38,7 +41,9 @@ def send_email_with_attachment(source, destination, message, attachments):
         part = MIMEApplication(attach['data'])
         mime = mimetypes.guess_type(attach['filename'])[0]
         # print mime
-        part.add_header('Content-Disposition', 'attachment', filename=attach['filename'])
+        part.add_header('Content-Disposition',
+                        'attachment',
+                        filename=attach['filename'])
         part.add_header('Content-Type', mime)
         msg.attach(part)
 

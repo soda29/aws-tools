@@ -6,21 +6,19 @@ botosess = boto3.session.Session()
 athena = botosess.client('athena', region_name='us-east-1')
 
 AWS_ACCOUNT_ID = '094103223014'
-output_location_path = 's3://aws-athena-query-results-{}-us-east-1'.format(AWS_ACCOUNT_ID)
+output_location_path = ('s3://aws-athena-query-results-{}'
+                        '-us-east-1').format(AWS_ACCOUNT_ID)
+
 
 def start_query_execution(query, database):
     response = athena.start_query_execution(
         QueryString=query,
-        ResultConfiguration={
-        'OutputLocation': output_location_path,
-          'EncryptionConfiguration': {
-            'EncryptionOption': 'SSE_S3'
-          },
-        },
-        QueryExecutionContext={
-            'Database': database
-            },
-        )
+        ResultConfiguration={'OutputLocation': output_location_path,
+                             'EncryptionConfiguration': {
+                                'EncryptionOption': 'SSE_S3'
+                             }},
+        QueryExecutionContext={'Database': database}
+    )
     print('Execution ID: ' + response['QueryExecutionId'])
     return response['QueryExecutionId']
 
@@ -32,10 +30,11 @@ def get_query_status(execution_id):
     status = response.get('QueryExecution')
     return status
 
+
 def query(q, database):
     execution_id = start_query_execution(q, database)
 
-    while get_query_status(execution_id).get('Status').get('State') == 'RUNNING':
+    while get_query_status(execution_id).get['Status']['State'] == 'RUNNING':
         print('sleeping...')
         time.sleep(10)
 
@@ -47,15 +46,17 @@ def query(q, database):
     else:
         raise Exception(status)
 
+
 def query_results(q, database, format_json=True):
     s3_params = query(q, database)
-    result_object = s3.get_object(s3_params.get('bucket_name'), s3_params.get('key'))
+    result_object = s3.get_object(s3_params.get('bucket_name'),
+                                  s3_params.get('key'))
     body = result_object.get()['Body']
     headers = []
 
     # iterating .csv athena result file row by row
     for n, line in enumerate(body._raw_stream):
-        row = curate(line.strip())
+        row = curate(line.strip().decode('utf-8'))
         if format_json:
             if n == 0:
                 headers = row
@@ -64,6 +65,7 @@ def query_results(q, database, format_json=True):
         else:
             yield row
 
+
 def curate(line):
     for l in reader([line]):
-        return map(lambda x: None if not x else x, l)
+        return list(map(lambda x: None if not x else x, l))
