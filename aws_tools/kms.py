@@ -25,7 +25,7 @@ def decrypt(encrypted):
     '''Decrypt'''
 
     kms = get_kms_client()
-    bs64str = base64.b64decode(encrypted)
+    b64str = base64.b64decode(encrypted)
     decrypted = kms.decrypt(CiphertextBlob=b64str)['Plaintext']
     return decrypted
 
