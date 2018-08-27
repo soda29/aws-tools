@@ -2,7 +2,7 @@ import boto3
 import botocore
 
 
-botosess = boto3.session.Session()
+ssm = boto3.client('ssm')
 
 
 def get_ssm_client(endpoint_url=None):
@@ -10,7 +10,7 @@ def get_ssm_client(endpoint_url=None):
     kwargs = {}
     if endpoint_url:
         kwargs['endpoint_url'] = endpoint_url
-    ssm = botosess.client('ssm', region_name='us-east-1', **kwargs)
+    ssm = boto3.client('ssm', region_name='us-east-1', **kwargs)
     return ssm
 
 

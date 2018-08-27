@@ -1,7 +1,7 @@
 import boto3
 import base64
 
-botosess = boto3.session.Session()
+kms = boto3.client('kms')
 
 
 def get_kms_client(endpoint_url=None):
@@ -9,7 +9,7 @@ def get_kms_client(endpoint_url=None):
     kwargs = {}
     if endpoint_url:
         kwargs['endpoint_url'] = endpoint_url
-    kms = botosess.client('kms', 'us-east-1', **kwargs)
+    kms = boto3.client('kms', 'us-east-1', **kwargs)
     return kms
 
 
@@ -17,7 +17,7 @@ def get_kms_resource(endpoint_url=None):
     kwargs = {}
     if endpoint_url:
         kwargs['endpoint_url'] = endpoint_url
-    kms = botosess.resource('kms', 'us-east-1', **kwargs)
+    kms = boto3.resource('kms', 'us-east-1', **kwargs)
     return s3
 
 

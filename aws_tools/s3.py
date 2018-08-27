@@ -2,7 +2,7 @@ import boto3
 from os import environ
 
 
-botosess = boto3.session.Session()
+s3 = boto3.client('s3')
 
 
 def get_s3_client(endpoint_url=None):
@@ -10,7 +10,7 @@ def get_s3_client(endpoint_url=None):
     kwargs = {}
     if endpoint_url:
         kwargs['endpoint_url'] = endpoint_url
-    s3 = botosess.client('s3', 'us-east-1', **kwargs)
+    s3 = boto3.client('s3', 'us-east-1', **kwargs)
     return s3
 
 
@@ -18,7 +18,7 @@ def get_s3_resource(endpoint_url=None):
     kwargs = {}
     if endpoint_url:
         kwargs['endpoint_url'] = endpoint_url
-    s3 = botosess.resource('s3', 'us-east-1', **kwargs)
+    s3 = boto3.resource('s3', 'us-east-1', **kwargs)
     return s3
 
 
